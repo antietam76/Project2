@@ -6,54 +6,59 @@ Created on Fri Jan 31 11:55:31 2020
 @author: jacobksu
 """
 
-
+## Click the center of the power supply 
+## where the two pieces of tape meet. 
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 #import sympy as sym
-
-cap = cv2.VideoCapture(0)
-
-Fx = 1013.4176 #pixels
-Fy = 1011.2264 #pixels
-#Or = 659.5295 #pixels
-#Oc = 355.5793 #pixels
-#r = 650     #pixels
-#c = 540     # pixels
-#z = 747.54 #pixels ### #1219.2 * .61314#mm to pixels 
-R = np.array([[-0.9995, -0.0135, -0.0293],
-               [0.0110, -0.9966,  0.0812],
-              [-0.0303,  0.0809,  0.9963],
-              [96.1631,  330.2148, 1359.4]])
-K = np.array([[1385.5868,    0,         0],
-              [0,        1377.2714,     0],
-              [648.061,    264.0641,     1]])
-Z = [-150, -70, -150, -80, 0]
-
-#x = sym.Symbol('x')
-#y = sym.Symbol('y')
-
-
+image = ["/home/jacobksu/Pictures/1.jpg","/home/jacobksu/Pictures/2.jpg","/home/jacobksu/Pictures/3.jpg","/home/jacobksu/Pictures/4.jpg","/home/jacobksu/Pictures/5.jpg"]
+for i in image:
+#cap = cv2.VideoCapture(0)
+    g = cv2.imread(i)
     
-
-ret, frame = cap.read()
-
-
-plt.figure(0)
-plt.clf()
-plt.imshow(frame)
-            
-source = np.asarray(plt.ginput(1),np.float32)
-#            if cv2.waitKey(1) & 0xFF == ord('q'):
-#     
-r = source[0,0]
-c = source [0,1]   
-i_f =np.array([[r, c, 1]])   
-
- 
-for z in Z:
-    C= np.array([[1, 1, z, 1]])
-    aall = C.dot(R.dot(K))
-    wow = np.linalg.solve(aall,np.transpose(i_f))
- 
-cap.release()
+    Fx = 1385.5868 #pixels
+    Fy = 1377.2714 #pixels
+    Or = 648.061 #pixels
+    Oc = 264.0641 #pixels
+    z = 1260 
+    H_matrix = np.array([[-0.9995, -0.0135, -0.0293],
+                   [0.0110, -0.9966,  0.0812],
+                  [-0.0303,  0.0809,  0.9963],
+                  [96.1631,  330.2148, 1359.4]])
+    #K = np.array([[1385.5868,    0,         0],
+    #              [0,        1377.2714,     0],
+    #              [648.061,    264.0641,     1]])
+    #Z = [-150, -70, -150, -80, 0]
+    
+    #x = sym.Symbol('x')
+    #y = sym.Symbol('y')
+    
+    #ret, frame = cap.read()
+    
+    
+    plt.figure(0)
+    plt.clf()
+    plt.imshow(g)
+                
+    source = np.asarray(plt.ginput(1),np.float32)
+    #            if cv2.waitKey(1) & 0xFF == ord('q'):
+    #     
+    r = source[0,0]
+    c = source [0,1]   
+    i_f =np.array([[r, c, 1]])   
+    print("Object Coordinates", str(r) + ', ' + str(c))
+     
+    
+    x = z * ((Or - r)/Fx)
+    y = z * ((Oc - c)/Fy)
+    cF_coord = [[x], [y], [z], [1]]
+    cFrame = np.array(cF_coord)
+    wFrame = np.multiply(cFrame, H_matrix)
+    
+    print("The x coordinate is: " + str(wFrame[0][0]))
+    print("The y coordinate is: " + str(wFrame[0][1]))
+    
+    
+     
+    plt.clf()
