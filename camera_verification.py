@@ -3,7 +3,7 @@
 """
 Created on Fri Jan 31 11:55:31 2020
 
-@author: jacobksu
+@author: Jacob Burnett, Sam Epeagba, Yueyan Yang
 """
 
 ## Click the center of the power supply 
@@ -12,7 +12,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 
-image = ["/home/jacobksu/Pictures/1.jpg","/home/jacobksu/Pictures/2.jpg","/home/jacobksu/Pictures/3.jpg","/home/jacobksu/Pictures/4.jpg","/home/jacobksu/Pictures/5.jpg"]
+image = (["/home/jacobksu/Pictures/1.jpg","/home/jacobksu/Pictures/2.jpg","/home/jacobksu/Pictures/3.jpg","/home/jacobksu/Pictures/4.jpg","/home/jacobksu/Pictures/5.jpg"])
 for i in image:
     g = cv2.imread(i)
     
